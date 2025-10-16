@@ -1,0 +1,25 @@
+# Ignorar artefatos locais e arquivos não necessários no build
+.git
+.gitignore
+node_modules
+npm-debug.log
+yarn.lock
+pnpm-lock.yaml
+vendor
+storage/*.key
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/testing/*
+storage/framework/views/*
+storage/logs/*
+storage/app/private/*
+storage/api-docs/*
+.env
+.env.*
+docker-compose.yml
+.DS_Store
+*.swp
+*.swo
+coverage
+phpunit.xml
+tests

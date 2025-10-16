@@ -1,0 +1,99 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Marge PDF`s",
+        "description": "API para unir boletos (PDFs) em um único arquivo",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000",
+            "description": "Servidor local"
+        }
+    ],
+    "paths": {
+        "/api/merge-pdfs": {
+            "post": {
+                "tags": [
+                    "PDF"
+                ],
+                "summary": "Une PDFs vindos de URLs em um único arquivo",
+                "description": "Unir múltiplos PDFs a partir de URLs",
+                "operationId": "f72a7698750838fdf516e8922167c640",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "urls"
+                                ],
+                                "properties": {
+                                    "urls": {
+                                        "description": "Lista de URLs de PDFs",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "uri"
+                                        }
+                                    },
+                                    "filename": {
+                                        "description": "Nome do arquivo PDF resultante",
+                                        "type": "string",
+                                        "example": "boletos-unidos.pdf"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "URL do PDF mesclado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "url": {
+                                            "type": "string",
+                                            "format": "uri"
+                                        },
+                                        "filename": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação ou download",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "PDF",
+            "description": "Operações relacionadas a PDFs"
+        }
+    ]
+}
