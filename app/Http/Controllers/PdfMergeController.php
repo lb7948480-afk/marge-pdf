@@ -26,6 +26,13 @@ class PdfMergeController extends Controller
      *     @OA\JsonContent(
      *       type="object",
      *       required={"urls"},
+     *       example={
+     *         "urls"={
+     *           "https://exemplo.com/a.pdf",
+     *           "https://exemplo.com/b.pdf"
+     *         },
+     *         "filename"="boletos-unidos.pdf"
+     *       },
      *       @OA\Property(
      *         property="urls",
      *         type="array",

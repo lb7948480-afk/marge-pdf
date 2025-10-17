@@ -44,6 +44,13 @@
                                     }
                                 },
                                 "type": "object"
+                            },
+                            "example": {
+                                "urls": [
+                                    "https://exemplo.com/a.pdf",
+                                    "https://exemplo.com/b.pdf"
+                                ],
+                                "filename": "boletos-unidos.pdf"
                             }
                         }
                     }

@@ -1,0 +1,65 @@
+name: 'Build image'
+
+on:
+  workflow_dispatch:
+    inputs:
+      debug_enabled:
+        type: boolean
+        description: 'With TMATE'
+        required: false
+        default: true
+  push:
+    branches:
+      - main
+
+jobs:
+  build-container:
+    runs-on: github-runner-linkmonitoramento
+    # env:
+    #   MAVEN_OPTS: "-Xmx6g"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Set Release
+        shell: bash
+        run: |
+          #Set Name
+          echo "releaseName=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)" >> $GITHUB_ENV
+
+          #Set Tag
+          if [ "$GITHUB_REF_NAME" = "dev" ];then
+            echo "releaseTag=dev" >> $GITHUB_ENV
+          elif [ "$GITHUB_REF_NAME" = "main" ];then
+            echo "releaseTag=prod" >> $GITHUB_ENV
+          fi
+
+        ## Tmate ##
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
+        # timeout-minutes: 60
+        # with:
+          # install-dependencies: false
+
+      # - name: resolvConf
+      #   run: |
+      #     echo 'nameserver 1.1.1.1
+      #     nameserver 8.8.8.8' | sudo tee /etc/resolv.conf
+
+      - name: Clonar a Action Privada
+        run: |
+          git clone https://x-access-token:${{ secrets.CONTAINER_BUILDER_TOKEN }}@github.com/${{ secrets.CONTAINER_BUILDER_ACTION }}.git actions_dir
+        env:
+          PAT_TOKEN: ${{ secrets.CONTAINER_BUILDER_TOKEN }}
+
+      - name: Build Container
+        uses: ./actions_dir
+        with:
+          releaseName: ${{ env.releaseName }}
+          releaseTag: ${{ env.releaseTag }}
+          # registry: docker.io
+          # registryUser: ${{ secrets.DOCKER_USERNAME }}
+          # registryPassword: ${{ secrets.DOCKER_PASSWORD }}
+          registryProject: ${{ secrets.CONTAINER_BUILDER_REGISTRY }}
+          archs: linux/amd64
