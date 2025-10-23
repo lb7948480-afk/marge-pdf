@@ -28,5 +28,11 @@ php artisan l5-swagger:generate >/dev/null 2>&1 || true
 php artisan config:cache >/dev/null 2>&1 || true
 php artisan route:cache >/dev/null 2>&1 || true
 
-echo "Starting Laravel at 0.0.0.0:${PORT:-8000}"
-exec php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
+SERVER_MODE="${SERVER_MODE:-artisan}"
+if [ "$SERVER_MODE" = "php-fpm" ]; then
+  echo "Starting PHP-FPM (fastcgi) on 0.0.0.0:9000"
+  exec php-fpm -F
+else
+  echo "Starting Laravel at 0.0.0.0:${PORT:-8000}"
+  exec php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
+fi
