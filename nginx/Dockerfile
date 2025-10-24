@@ -14,6 +14,9 @@ RUN npm run build
 FROM nginx:alpine
 WORKDIR /var/www/html
 
+# Install curl for container healthcheck
+RUN apk add --no-cache curl
+
 # Copy Nginx config
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
