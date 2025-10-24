@@ -42,5 +42,8 @@ RUN apt-get update && apt-get install -y unzip git libzip-dev \
  && chown -R www-data:www-data storage bootstrap/cache \
  && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives
 
+# Ensure PHP-FPM listens on all interfaces for Nginx upstream
+RUN sed -i 's/^listen = .*/listen = 0.0.0.0:9000/' /usr/local/etc/php-fpm.d/www.conf
+
 # Run Laravel using the provided entrypoint (serves on PORT or 8000)
 CMD ["sh", "docker/entrypoint.sh"]
